@@ -1,0 +1,14 @@
+{
+  "name": "Auth",
+  "alias": "auth",
+  "description": "",
+  "keywords": [],
+  "active": 1,
+  "order": 0,
+  "providers": ["App\\Auth\\Providers\\AuthServiceProvider"],
+  "aliases": {
+    "ApiAuth": "App\\Auth\\Facades\\ApiAuth"
+  },
+  "files": [],
+  "requires": []
+}
