@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class Authenticate
 {
     protected $except = [
-        'auth/sign'
+        'auth/login'
     ];
 
     /**

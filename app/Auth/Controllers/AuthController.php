@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller;
 
 class AuthController extends Controller
 {
-    public function postSign(Request $request)
+    public function postLogin(Request $request)
     {
         $username = $request->username;
         $password = $request->password;

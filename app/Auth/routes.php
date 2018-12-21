@@ -1,3 +1,3 @@
 <?php
 
-Route::post('signin', 'AuthController@postSign');
+Route::post('login', 'AuthController@postLogin');
