@@ -45,15 +45,20 @@ class UsersTableSeeder extends Seeder
         $admin = Role::create(['name' => 'admin']);
 
         // create permissions
-        $readUser = Permission::create(['name' => 'read_user']);
-        $createUser = Permission::create(['name' => 'create_user']);
-        $editUser = Permission::create(['name' => 'edit_user']);
-        $deleteUser = Permission::create(['name' => 'delete_user']);
+        $readDashboard = Permission::create(['name' => 'read_dashboard']);
+        $createDashboard = Permission::create(['name' => 'create_dashboard']);
+        $editDashboard = Permission::create(['name' => 'edit_dashboard']);
+        $deleteDashboard = Permission::create(['name' => 'delete_dashboard']);
 
-        $readRole = Permission::create(['name' => 'read_role']);
-        $createRole = Permission::create(['name' => 'create_role']);
-        $editRole = Permission::create(['name' => 'edit_role']);
-        $deleteRole = Permission::create(['name' => 'delete_role']);
+        $readUsers = Permission::create(['name' => 'read_users']);
+        $createUsers = Permission::create(['name' => 'create_users']);
+        $editUsers = Permission::create(['name' => 'edit_users']);
+        $deleteUsers = Permission::create(['name' => 'delete_users']);
+
+        $readRoles = Permission::create(['name' => 'read_roles']);
+        $createRoles = Permission::create(['name' => 'create_roles']);
+        $editRoles = Permission::create(['name' => 'edit_roles']);
+        $deleteRoles = Permission::create(['name' => 'delete_roles']);
 
         $readPermission = Permission::create(['name' => 'read_permission']);
         $createPermission = Permission::create(['name' => 'create_permission']);
@@ -66,17 +71,26 @@ class UsersTableSeeder extends Seeder
         $adminUser->assignRole($admin);
 
         // assign created permissions
-        $admin->givePermissionTo($readUser);
-        $admin->givePermissionTo($createUser);
-        $admin->givePermissionTo($editUser);
-        $admin->givePermissionTo($deleteUser);
-        $admin->givePermissionTo($readRole);
-        $admin->givePermissionTo($createRole);
-        $admin->givePermissionTo($editRole);
-        $admin->givePermissionTo($deleteRole);
+        $admin->givePermissionTo($readDashboard);
+        $admin->givePermissionTo($createDashboard);
+        $admin->givePermissionTo($editDashboard);
+        $admin->givePermissionTo($deleteDashboard);
+        $admin->givePermissionTo($readUsers);
+        $admin->givePermissionTo($createUsers);
+        $admin->givePermissionTo($editUsers);
+        $admin->givePermissionTo($deleteUsers);
+        $admin->givePermissionTo($readRoles);
+        $admin->givePermissionTo($createRoles);
+        $admin->givePermissionTo($editRoles);
+        $admin->givePermissionTo($deleteRoles);
         $admin->givePermissionTo($readPermission);
         $admin->givePermissionTo($createPermission);
         $admin->givePermissionTo($editPermission);
         $admin->givePermissionTo($deletePermission);
+
+        $general->givePermissionTo($readDashboard);
+        $general->givePermissionTo($createDashboard);
+        $general->givePermissionTo($editDashboard);
+        $general->givePermissionTo($deleteDashboard);
     }
 }
