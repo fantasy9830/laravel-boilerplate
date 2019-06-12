@@ -22,7 +22,7 @@ php artisan migrate
 ## Seeder
 假資料
 ```bash
-php artisan db:seed --class=RolesAndPermissionsSeeder
+php artisan db:seed
 ```
 
 # Features
