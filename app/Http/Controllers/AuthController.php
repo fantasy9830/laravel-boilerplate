@@ -74,16 +74,16 @@ class AuthController extends Controller
             }
 
             return response([
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => config('jwt.ttl') * 60,
-                'refresh_token' => $refreshToken,
-                'scope' => config('app.url'),
-            ])
-            ->withHeaders([
-                'Cache-Control' =>'no-store',
-                'Pragma' => 'no-cache',
-            ]);
+                    'access_token' => $token,
+                    'token_type' => 'bearer',
+                    'expires_in' => config('jwt.ttl') * 60,
+                    'refresh_token' => $refreshToken,
+                    'scope' => config('app.url'),
+                ])
+                ->withHeaders([
+                    'Cache-Control' =>'no-store',
+                    'Pragma' => 'no-cache',
+                ]);
         } else {
             return response([
                     'error' => 'unsupported_grant_type',
