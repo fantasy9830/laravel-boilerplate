@@ -48,14 +48,22 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof UnauthorizedHttpException) {
+            $message = $exception->getMessage();
+            $statusCode = $exception->getStatusCode();
+
+            $error = 'invalid_client';
+            if ($message === 'Token has expired') {
+                $error = 'invalid_token';
+            }
+
             return response([
-                'error' => 'invalid_client',
-                'error_description' => $exception->getMessage()
-            ], 401)
-            ->withHeaders([
-                'Cache-Control' =>'no-store',
-                'Pragma' => 'no-cache',
-            ]);
+                    'error' => $error,
+                    'error_description' => $message,
+                ], $statusCode)
+                ->withHeaders([
+                    'Cache-Control' =>'no-store',
+                    'Pragma' => 'no-cache',
+                ]);
         }
 
         return parent::render($request, $exception);

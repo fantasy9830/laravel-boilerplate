@@ -11,13 +11,13 @@ return [
     | to accept any value.
     |
     */
-   
+
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
-    'exposedHeaders' => [],
+    'exposedHeaders' => ['Authorization'],
     'maxAge' => 0,
 
 ];

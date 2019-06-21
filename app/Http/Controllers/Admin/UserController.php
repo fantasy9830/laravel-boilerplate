@@ -22,7 +22,7 @@ class UserController extends Controller
         return response()->json($data);
     }
 
-    public function postRegister(Request $request)
+    public function postUsers(Request $request)
     {
         $data = $this->service->register($request->all());
 

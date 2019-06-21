@@ -14,90 +14,83 @@ class AuthController extends Controller
         $grantType = request('grant_type');
 
         // 驗證 OAuth 2.0 授權類型
-        if ($grantType === 'password') {
+        if (empty($grantType)) {
+            return $this->respondWithError('invalid_request', 'Missing grant type', 400);
+        } elseif ($grantType === 'password') {
             $credentials = request(['username','password']);
 
             // 驗證是否有缺少參數
-            if (!isset($credentials['username']) || !isset($credentials['password'])) {
-                return response([
-                        'error' => 'invalid_request',
-                        'error_description' => '缺少參數！'
-                    ], 400)
-                    ->withHeaders([
-                        'Cache-Control' =>'no-store',
-                        'Pragma' => 'no-cache',
-                    ]);
+            if (!isset($credentials['username'])) {
+                return $this->respondWithError('invalid_request', "Request was missing the 'username' parameter", 400);
+            }
+
+            if (!isset($credentials['password'])) {
+                return $this->respondWithError('invalid_request', "Request was missing the 'password' parameter", 400);
             }
 
             // 登入驗證
             if ($token = Auth::attempt($credentials)) {
                 // Passed!
-                return response([
-                        'access_token' => $token,
-                        'token_type' => 'bearer',
-                        'expires_in' => config('jwt.ttl') * 60,
-                        'scope' => config('app.url'),
-                    ])
-                    ->withHeaders([
-                        'Cache-Control' =>'no-store',
-                        'Pragma' => 'no-cache',
-                    ]);
+                return $this->respondWithToken($token);
             } else {
-                return response([
-                        'error' => 'invalid_client',
-                        'error_description' => '登入驗證失敗！'
-                    ], 401)
-                    ->withHeaders([
-                        'Cache-Control' =>'no-store',
-                        'Pragma' => 'no-cache',
-                    ]);
+                return $this->respondWithError('invalid_client', 'Client Authentication failed', 401);
             }
         } elseif ($grantType === 'refresh_token') {
             $refreshToken = request('refresh_token');
 
             // 驗證是否有缺少參數
             if (empty($refreshToken)) {
-                return response([
-                        'error' => 'invalid_request',
-                        'error_description' => '缺少參數！'
-                    ], 400)
-                    ->withHeaders([
-                        'Cache-Control' =>'no-store',
-                        'Pragma' => 'no-cache',
-                    ]);
+                return $this->respondWithError('invalid_request', "Request was missing the 'refresh_token' parameter", 400);
             }
 
             try {
                 $token = Auth::setToken($refreshToken)->refresh();
             } catch (JWTException $exception) {
-                throw new UnauthorizedHttpException('jwt-auth', $exception->getMessage());
+                throw new UnauthorizedHttpException('Bearer', $exception->getMessage());
             }
 
-            return response([
-                    'access_token' => $token,
-                    'token_type' => 'bearer',
-                    'expires_in' => config('jwt.ttl') * 60,
-                    'refresh_token' => $refreshToken,
-                    'scope' => config('app.url'),
-                ])
-                ->withHeaders([
-                    'Cache-Control' =>'no-store',
-                    'Pragma' => 'no-cache',
-                ]);
+            return $this->respondWithToken($token, $refreshToken);
         } else {
-            return response([
-                    'error' => 'unsupported_grant_type',
-                    'error_description' => '授權類型無法識別，本伺服器僅支持 password 和 refresh_token 類型！'
-                ], 400)
-                ->withHeaders([
-                    'Cache-Control' =>'no-store',
-                    'Pragma' => 'no-cache',
-                ]);
+            return $this->respondWithError('unsupported_grant_type', "Unsupported grant type: '{$grantType}'", 400);
         }
     }
 
     public function postRegister()
     {
         // register
+    }
+
+    protected function respondWithToken(string $token, string $refreshToken = null)
+    {
+        $response = [
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires_in' => config('jwt.ttl') * 60,
+            'scope' => config('app.url'),
+        ];
+
+        if ($refreshToken) {
+            $response = array_merge($response, [
+                'refresh_token' => $refreshToken,
+            ]);
+        }
+
+        return response($response)
+            ->withHeaders([
+                'Cache-Control' =>'no-store',
+                'Pragma' => 'no-cache',
+            ]);
+    }
+
+    protected function respondWithError(string $error, string $description, int $code)
+    {
+        return response([
+                'error' => $error,
+                'error_description' => $description
+            ], $code)
+            ->withHeaders([
+                'Cache-Control' =>'no-store',
+                'Pragma' => 'no-cache',
+            ]);
     }
 }

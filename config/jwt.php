@@ -170,8 +170,9 @@ return [
     */
 
     'persistent_claims' => [
-        'roles',
-        'permissions',
+        // 'nickname',
+        // 'roles',
+        // 'permissions',
     ],
 
     /*

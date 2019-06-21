@@ -34,7 +34,7 @@ Route::prefix('/v1')->group(function () {
                 // 用戶列表
                 Route::get('/', 'UserController@getUsers');
                 // 新增用戶
-                Route::post('/registration', 'UserController@postRegister');
+                Route::post('/', 'UserController@postUsers');
                 // 指派角色
                 Route::post('/{userId}/roles', 'UserController@postRoles');
                 // 同步角色

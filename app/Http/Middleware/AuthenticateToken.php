@@ -27,14 +27,14 @@ class AuthenticateToken extends BaseMiddleware
                 return $next($request);
             }
 
-            throw new UnauthorizedHttpException('jwt-auth', 'User not found');
+            throw new UnauthorizedHttpException('Bearer', 'User not found');
         } catch (TokenExpiredException $exception) {
             try {
                 $token = $this->auth->refresh();
 
                 Auth::onceUsingId($this->auth->manager()->getPayloadFactory()->buildClaimsCollection()->toPlainArray()['sub']);
             } catch (JWTException $exception) {
-                throw new UnauthorizedHttpException('jwt-auth', $exception->getMessage());
+                throw new UnauthorizedHttpException('Bearer', $exception->getMessage());
             }
         }
 

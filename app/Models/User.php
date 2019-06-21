@@ -37,21 +37,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [
-            'nickname' => $this->nickname,
-            'roles' => $this->getRoleNames(),
-            'permissions' => $this->getAllPermissions()
-                ->groupBy('guard_name')
-                ->flatMap(function ($item) {
-                    return $item->pluck('name');
-                })
-                ->reduce(function ($carry, $permission) {
-                    [$action, $name] = explode('_', $permission);
-                    $carry[$name][] = $action;
-
-                    return $carry;
-                }, []),
-        ];
+        return [];
     }
 
     public static function create(array $attributes = [])
