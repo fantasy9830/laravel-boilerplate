@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -47,25 +46,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof UnauthorizedHttpException) {
-            $message = $exception->getMessage();
-            $statusCode = $exception->getStatusCode();
-
-            $error = 'invalid_client';
-            if ($message === 'Token has expired') {
-                $error = 'invalid_token';
-            }
-
-            return response([
-                    'error' => $error,
-                    'error_description' => $message,
-                ], $statusCode)
-                ->withHeaders([
-                    'Cache-Control' =>'no-store',
-                    'Pragma' => 'no-cache',
-                ]);
-        }
-
         return parent::render($request, $exception);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use App\Exceptions\UnauthorizedTokenException;
 
 class AuthController extends Controller
 {
@@ -46,7 +46,7 @@ class AuthController extends Controller
             try {
                 $token = Auth::setToken($refreshToken)->refresh();
             } catch (JWTException $exception) {
-                throw new UnauthorizedHttpException('Bearer', $exception->getMessage());
+                throw new UnauthorizedTokenException($exception->getMessage());
             }
 
             return $this->respondWithToken($token, $refreshToken);
