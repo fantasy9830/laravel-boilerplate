@@ -15,17 +15,18 @@ class AuthController extends Controller
 
         // 驗證 OAuth 2.0 授權類型
         if (empty($grantType)) {
-            return $this->respondWithError('invalid_request', 'Missing grant type', 400);
+            throw new ErrorException(400, 'invalid_request', 'Missing grant type');
+
         } elseif ($grantType === 'password') {
             $credentials = request(['username','password']);
 
             // 驗證是否有缺少參數
             if (!isset($credentials['username'])) {
-                return $this->respondWithError('invalid_request', "Request was missing the 'username' parameter", 400);
+                throw new ErrorException(400, 'invalid_request', "Request was missing the 'username' parameter");
             }
 
             if (!isset($credentials['password'])) {
-                return $this->respondWithError('invalid_request', "Request was missing the 'password' parameter", 400);
+                throw new ErrorException(400, 'invalid_request', "Request was missing the 'password' parameter");
             }
 
             // 登入驗證
@@ -33,14 +34,14 @@ class AuthController extends Controller
                 // Passed!
                 return $this->respondWithToken($token);
             } else {
-                return $this->respondWithError('invalid_client', 'Client Authentication failed', 401);
+                throw new ErrorException(401, 'invalid_client', 'Client Authentication failed');
             }
         } elseif ($grantType === 'refresh_token') {
             $refreshToken = request('refresh_token');
 
             // 驗證是否有缺少參數
             if (empty($refreshToken)) {
-                return $this->respondWithError('invalid_request', "Request was missing the 'refresh_token' parameter", 400);
+                throw new ErrorException(400, 'invalid_request', "Request was missing the 'refresh_token' parameter");
             }
 
             try {
@@ -51,7 +52,7 @@ class AuthController extends Controller
 
             return $this->respondWithToken($token, $refreshToken);
         } else {
-            return $this->respondWithError('unsupported_grant_type', "Unsupported grant type: '{$grantType}'", 400);
+            throw new ErrorException(400, 'unsupported_grant_type', "Unsupported grant type: '{$grantType}'");
         }
     }
 
@@ -76,18 +77,6 @@ class AuthController extends Controller
         }
 
         return response($response)
-            ->withHeaders([
-                'Cache-Control' =>'no-store',
-                'Pragma' => 'no-cache',
-            ]);
-    }
-
-    protected function respondWithError(string $error, string $description, int $code)
-    {
-        return response([
-                'error' => $error,
-                'error_description' => $description
-            ], $code)
             ->withHeaders([
                 'Cache-Control' =>'no-store',
                 'Pragma' => 'no-cache',
