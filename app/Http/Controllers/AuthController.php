@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Exceptions\ErrorException;
+use App\Exceptions\UnauthorizedTokenException;
 use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Exceptions\UnauthorizedTokenException;
 
 class AuthController extends Controller
 {
