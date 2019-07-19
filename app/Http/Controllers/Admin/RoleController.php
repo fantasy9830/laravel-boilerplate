@@ -40,7 +40,7 @@ class RoleController extends Controller
 
     public function postPermissions(int $roleId)
     {
-        $permissions = request('permissions');
+        $permissions = request('permissions', []);
 
         $data = $this->service->givePermissionTo($roleId, $permissions);
 
@@ -49,7 +49,7 @@ class RoleController extends Controller
 
     public function putPermissions(int $roleId)
     {
-        $permissions = request('permissions');
+        $permissions = request('permissions', []);
 
         $data = $this->service->syncPermissions($roleId, $permissions);
 
@@ -58,7 +58,7 @@ class RoleController extends Controller
 
     public function postRevokePermissions(int $roleId)
     {
-        $permissions = request('permissions');
+        $permissions = request('permissions', []);
 
         $data = $this->service->revokePermissionTo($roleId, $permissions);
 

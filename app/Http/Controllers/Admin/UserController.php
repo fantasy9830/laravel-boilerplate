@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function postRoles(int $userId)
     {
-        $roles = request('roles');
+        $roles = request('roles', []);
 
         $data = $this->service->assignRole($userId, $roles);
 
@@ -40,7 +40,7 @@ class UserController extends Controller
 
     public function putRoles(int $userId)
     {
-        $roles = request('roles');
+        $roles = request('roles', []);
 
         $data = $this->service->syncRoles($userId, $roles);
 
@@ -49,7 +49,7 @@ class UserController extends Controller
 
     public function postRemoveRoles(int $userId)
     {
-        $roles = request('roles');
+        $roles = request('roles', []);
 
         $data = $this->service->removeRole($userId, $roles);
 
@@ -58,7 +58,7 @@ class UserController extends Controller
 
     public function postPermissions(int $userId)
     {
-        $permissions = request('permissions');
+        $permissions = request('permissions', []);
 
         $data = $this->service->givePermissionTo($userId, $permissions);
 
@@ -67,7 +67,7 @@ class UserController extends Controller
 
     public function putPermissions(int $userId)
     {
-        $permissions = request('permissions');
+        $permissions = request('permissions', []);
 
         $data = $this->service->syncPermissions($userId, $permissions);
 
@@ -76,7 +76,7 @@ class UserController extends Controller
 
     public function postRevokePermissions(int $userId)
     {
-        $permissions = request('permissions');
+        $permissions = request('permissions', []);
 
         $data = $this->service->revokePermissionTo($userId, $permissions);
 
