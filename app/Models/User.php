@@ -30,6 +30,15 @@ class User extends Authenticatable implements JWTSubject
         'password'
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->password = bcrypt($model->password);
+        });
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -38,12 +47,5 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
-    }
-
-    public static function create(array $attributes = [])
-    {
-        $attributes['password'] = bcrypt($attributes['password']);
-
-        return static::query()->create($attributes);
     }
 }

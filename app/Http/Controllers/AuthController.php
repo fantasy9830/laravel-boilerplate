@@ -17,7 +17,6 @@ class AuthController extends Controller
         // 驗證 OAuth 2.0 授權類型
         if (empty($grantType)) {
             throw new ErrorException(400, 'invalid_request', 'Missing grant type');
-
         } elseif ($grantType === 'password') {
             $credentials = request(['username','password']);
 
