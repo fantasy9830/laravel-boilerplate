@@ -23,32 +23,23 @@ class PermissionService
         return $this->permissionRepository->create($permissionData);
     }
 
-    public function editName(int $permissionId, string $name = '')
+    public function editName(int $id, string $name = '')
     {
-        return $this->permissionRepository->update(['name' => $name], $permissionId);
+        return $this->permissionRepository->update(['name' => $name], $id);
     }
 
-    public function assignRole(int $permissionId, array $roles = [])
+    public function syncUsers(int $id, array $users = [])
     {
-        return $this->permissionRepository->find($permissionId)->assignRole($roles);
+        return $this->permissionRepository->find($id)->user()->sync($users);
     }
 
-    public function syncRoles(int $permissionId, array $roles = [])
+    public function syncRoles(int $id, array $roles = [])
     {
-        return $this->permissionRepository->find($permissionId)->syncRoles($roles);
+        return $this->permissionRepository->find($id)->syncRoles($roles);
     }
 
-    public function removeRole(int $permissionId, array $roles = [])
+    public function delete(int $id)
     {
-        $permission = $this->permissionRepository->find($permissionId);
-
-        return collect($roles)->each(function ($role) use ($permission) {
-            $permission->removeRole($role);
-        });
-    }
-
-    public function delete(int $permissionId)
-    {
-        return $this->permissionRepository->delete($permissionId);
+        return $this->permissionRepository->delete($id);
     }
 }

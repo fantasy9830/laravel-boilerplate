@@ -7,9 +7,54 @@ use App\Exceptions\ErrorException;
 use App\Exceptions\UnauthorizedTokenException;
 use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * @OA\Post(
+     *      path="/auth/token",
+     *      tags={"Auth"},
+     *      summary="用戶登入",
+     *      description="登入並取得 JWT",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={"grant_type"},
+     *                  @OA\Property(
+     *                      property="grant_type",
+     *                      description="OAuth 2.0 授權類型 password or refresh_token",
+     *                      type="string",
+     *                      enum={"password", "refresh_token"}
+     *                  ),
+     *                  @OA\Property(
+     *                      property="username",
+     *                      description="帳號",
+     *                      type="string",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="password",
+     *                      description="密碼",
+     *                      type="string",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="refresh_token",
+     *                      description="舊的 access token",
+     *                      type="string",
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="登入成功"),
+     *      @OA\Response(
+     *          response="default",
+     *          description="unexpected error",
+     *          @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *      ),
+     * )
+     */
     public function postToken()
     {
         $grantType = request('grant_type');
@@ -56,9 +101,80 @@ class AuthController extends Controller
         }
     }
 
-    public function postRegister()
+    /**
+     * @OA\Post(
+     *      path="/register",
+     *      tags={"Auth"},
+     *      summary="註冊",
+     *      description="註冊新的帳號",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                   required={"username", "email", "password", "password_confirmation", "name", "nickname", "gender"},
+     *                   @OA\Property(
+     *                       property="username",
+     *                       description="帳號",
+     *                       type="string",
+     *                   ),
+     *                   @OA\Property(
+     *                       property="email",
+     *                       description="Email",
+     *                       type="string",
+     *                   ),
+     *                   @OA\Property(
+     *                       property="password",
+     *                       description="密碼",
+     *                       type="string",
+     *                   ),
+     *                  @OA\Property(
+     *                      property="password_confirmation",
+     *                      description="密碼驗證",
+     *                      type="string",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="name",
+     *                      description="姓名",
+     *                      type="string",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="nickname",
+     *                      description="暱稱",
+     *                      type="string",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="gender",
+     *                      description="性別",
+     *                      type="string",
+     *                      enum={"male", "female"}
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="註冊成功"),
+     *      @OA\Response(
+     *          response="default",
+     *          description="unexpected error",
+     *          @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *      ),
+     * )
+     */
+    public function postRegister(Request $request)
     {
-        // register
+        try {
+            $credentials = $request->validate([
+                'username' => 'required',
+                'email' => 'required',
+                'password' => 'required|confirmed',
+                'name' => 'required',
+                'nickname' => 'required',
+                'gender' => 'required',
+            ]);
+        } catch (ValidationException $e) {
+            throw new ErrorException(400, 'invalid_request', $e->getMessage());
+        }
+
+        return $credentials;
     }
 
     protected function respondWithToken(string $token, string $refreshToken = null)

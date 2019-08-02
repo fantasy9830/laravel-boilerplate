@@ -15,6 +15,17 @@ class PersonalController extends Controller
         $this->service = $service;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/user/profile",
+     *      tags={"Personal"},
+     *      summary="取得個人資料",
+     *      description="利用 header 附帶的 token 來取得個人資料",
+     *      security={{"bearerAuth": {}}},
+     *      @OA\Response(response=200, description="取得個人資料"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
     public function getProfile()
     {
         $userId = Auth::id();

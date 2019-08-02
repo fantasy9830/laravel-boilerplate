@@ -18,37 +18,28 @@ class RoleService
         return $this->roleRepository->all();
     }
 
-    public function create(array $roleData)
+    public function create(array $data)
     {
-        return $this->roleRepository->create($roleData);
+        return $this->roleRepository->create($data);
     }
 
-    public function editName(int $roleId, string $name = '')
+    public function editName(int $id, string $name = '')
     {
-        return $this->roleRepository->update(['name' => $name], $roleId);
+        return $this->roleRepository->update(['name' => $name], $id);
     }
 
-    public function givePermissionTo(int $roleId, array $permissions = [])
+    public function syncUsers(int $id, array $users = [])
     {
-        return $this->roleRepository->find($roleId)->givePermissionTo($permissions);
+        return $this->roleRepository->find($id)->user()->sync($users);
     }
 
-    public function syncPermissions(int $roleId, array $permissions = [])
+    public function syncPermissions(int $id, array $permissions = [])
     {
-        return $this->roleRepository->find($roleId)->syncPermissions($permissions);
+        return $this->roleRepository->find($id)->syncPermissions($permissions);
     }
 
-    public function revokePermissionTo(int $roleId, array $permissions = [])
+    public function delete(int $id)
     {
-        $role = $this->roleRepository->find($roleId);
-
-        return collect($permissions)->each(function ($permission) use ($role) {
-            $role->revokePermissionTo($permission);
-        });
-    }
-
-    public function delete(int $roleId)
-    {
-        return $this->roleRepository->delete($roleId);
+        return $this->roleRepository->delete($id);
     }
 }

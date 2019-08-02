@@ -26,11 +26,19 @@ php artisan migrate
 php artisan db:seed
 ```
 
-# Features
+## Enabling Debugbar
+set `DEBUGBAR_ENABLED` to `true` in your `.env` file
 
+## Auto-generate API documentation
+set `L5_SWAGGER_GENERATE_ALWAYS` to `true` in your `.env` file
+
+## API documentation URL
+`APP_URL`/api/documentation
+
+# Features
 * [x] CORS
 * [x] 登入認證功能(JWT)
 * [x] 權限管理(laravel-permission)
 * [x] Repository and Services Pattern
-* [x] Laravel Modules
+* [x] OpenApi Specification(L5-Swagger)
 * [ ] ...

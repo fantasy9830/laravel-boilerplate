@@ -18,14 +18,13 @@ class UserService
         return $this->userRepository->all();
     }
 
-    public function register(array $userData)
+    public function register(array $data)
     {
-        return $this->userRepository->create($userData);
-    }
+        if (!isset($data['password'])) {
+            $data['password'] = str_random(10);
+        }
 
-    public function assignRole(int $userId, array $roles = [])
-    {
-        return $this->userRepository->find($userId)->assignRole($roles);
+        return $this->userRepository->create($data);
     }
 
     public function syncRoles(int $userId, array $roles = [])
@@ -33,31 +32,13 @@ class UserService
         return $this->userRepository->find($userId)->syncRoles($roles);
     }
 
-    public function removeRole(int $userId, array $roles = [])
-    {
-        $user = $this->userRepository->find($userId);
-
-        return collect($roles)->each(function ($role) use ($user) {
-            $user->removeRole($role);
-        });
-    }
-
-    public function givePermissionTo(int $userId, array $permissions = [])
-    {
-        return $this->userRepository->find($userId)->givePermissionTo($permissions);
-    }
-
     public function syncPermissions(int $userId, array $permissions = [])
     {
         return $this->userRepository->find($userId)->syncPermissions($permissions);
     }
 
-    public function revokePermissionTo(int $userId, array $permissions = [])
+    public function deleteUsers(int $id)
     {
-        $user = $this->userRepository->find($userId);
-
-        return collect($permissions)->each(function ($permission) use ($user) {
-            $user->revokePermissionTo($permission);
-        });
+        return $this->userRepository->find($id)->delete();
     }
 }
