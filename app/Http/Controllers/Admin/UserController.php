@@ -34,6 +34,56 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *      path="/users/{id}/roles",
+     *      tags={"Users"},
+     *      summary="取得 user 的所有 Roles",
+     *      description="取得 user 的所有 Roles",
+     *      security={{"bearerAuth": {}}},
+     *      @OA\Parameter(
+     *          in="path",
+     *          name="id",
+     *          description="User ID",
+     *          required=true,
+     *          @OA\Schema(type="integer", format="int64")
+     *      ),
+     *      @OA\Response(response=200, description="取得 user 的所有 Roles"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
+    public function getRoles(int $id)
+    {
+        $data = $this->service->fetchRoles($id);
+
+        return response()->json($data);
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/users/{id}/permissions",
+     *      tags={"Users"},
+     *      summary="取得 user 的所有 Permissions",
+     *      description="取得 user 的所有 Permissions",
+     *      security={{"bearerAuth": {}}},
+     *      @OA\Parameter(
+     *          in="path",
+     *          name="id",
+     *          description="User ID",
+     *          required=true,
+     *          @OA\Schema(type="integer", format="int64")
+     *      ),
+     *      @OA\Response(response=200, description="取得 user 的所有 Permissions"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
+    public function getPermissions(int $id)
+    {
+        $data = $this->service->fetchPermissions($id);
+
+        return response()->json($data);
+    }
+
+    /**
      * @OA\Post(
      *      path="/users",
      *      tags={"Users"},

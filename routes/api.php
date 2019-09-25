@@ -39,6 +39,8 @@ Route::prefix('/v1')->group(function () {
         Route::middleware('role:admin')->namespace('Admin')->group(function () {
             Route::prefix('/users')->group(function () {
                 Route::get('/', 'UserController@getUsers');
+                Route::get('/{id}/roles', 'UserController@getRoles');
+                Route::get('/{id}/permissions', 'UserController@getPermissions');
                 Route::post('/', 'UserController@postUsers');
                 Route::put('/{id}/roles', 'UserController@putRoles');
                 Route::put('/{id}/permissions', 'UserController@putPermissions');
