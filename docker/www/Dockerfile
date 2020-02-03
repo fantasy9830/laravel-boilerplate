@@ -1,5 +1,7 @@
 FROM phusion/baseimage:latest
 
+LABEL maintainer="Ricky Lu <fantasy9830@gmail.com>"
+
 RUN DEBIAN_FRONTEND=noninteractive
 RUN locale-gen en_US.UTF-8
 

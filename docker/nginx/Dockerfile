@@ -1,5 +1,7 @@
 FROM nginx:alpine
 
+LABEL maintainer="Ricky Lu <fantasy9830@gmail.com>"
+
 COPY nginx.conf /etc/nginx/
 
 RUN apk update \
