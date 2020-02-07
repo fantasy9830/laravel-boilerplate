@@ -27,7 +27,7 @@ RUN set -x \
     apt-utils
 
 # Install pdo_mysql pdo_pgsql exif pcntl opcache zip gd
-RUN docker-php-ext-install -j$(nproc) pdo_mysql pdo_pgsql exif pcntl opcache zip iconv mcrypt \
+RUN docker-php-ext-install -j$(nproc) pdo_mysql pdo_pgsql exif pcntl opcache zip \
   && docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install -j$(nproc) gd
 
