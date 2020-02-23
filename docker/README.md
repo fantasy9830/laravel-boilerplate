@@ -14,8 +14,21 @@ sudo usermod -aG docker $(whoami)
 
 <https://docs.docker.com/compose/install/>
 
+## Recovery .env
+```bash
+cp .env.example .env
+
+cp mysql/createdb.sql.example mysql/createdb.sql
+```
+
 ## Run
 
 ```bash
 docker-compose up -d mysql nginx php www
+```
+
+### Enter your container
+
+```bash
+docker-compose exec www bash
 ```
