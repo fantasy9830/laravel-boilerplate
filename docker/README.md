@@ -15,6 +15,7 @@ sudo usermod -aG docker $(whoami)
 <https://docs.docker.com/compose/install/>
 
 ## Recovery .env
+
 ```bash
 cp .env.example .env
 
