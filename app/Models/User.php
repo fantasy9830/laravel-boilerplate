@@ -37,10 +37,6 @@ class User extends Authenticatable implements JWTSubject
         static::creating(function ($model) {
             $model->password = bcrypt($model->password);
         });
-
-        static::updating(function ($model) {
-            $model->password = bcrypt($model->password);
-        });
     }
 
     public function getJWTIdentifier()
